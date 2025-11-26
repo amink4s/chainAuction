@@ -1,20 +1,33 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# DailyCast Auction
 
-# Run and deploy your AI Studio app
+A Farcaster mini-app featuring a unique daily auction.
 
-This contains everything you need to run your app locally.
+## Features
 
-View your app in AI Studio: https://ai.studio/apps/drive/1hoIigAgj_4jNqS9YaJxK55l0G5xp5WaV
+- **Daily Auctions**: Unique artifacts available for auction daily.
+- **Bidding System**: Simulate placing bids in ETH (mock implementation).
+- **Smart Contract Analysis**: Analyze contracts for risk.
 
 ## Run Locally
 
-**Prerequisites:**  Node.js
-
+**Prerequisites:** Node.js
 
 1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+   ```bash
+   npm install
+   ```
+
+2. Run the app:
+   ```bash
+   npm run dev
+   ```
+
+## Deploy to Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+1. Push your code to a GitHub repository.
+2. Import the project into Vercel.
+3. Deploy!
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyour-username%2Fyour-repo-name)
