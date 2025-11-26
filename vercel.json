@@ -1,29 +1,15 @@
 {
-    "rewrites": [
-        {
-            "source": "/(.*)",
-            "destination": "/index.html"
-        }
-    ]
-,
-    "redirects": [
-        {
-        "source": "/.well-known/farcaster.json",
-        "destination": "https://api.farcaster.xyz/miniapps/hosted-manifest/019ac19c-19d9-5e1e-8446-348683ef9738",
-        "permanent": false
-        }
-    ]
-    ,
     "builds": [
-        {
+      {
         "src": "package.json",
         "use": "@vercel/static-build",
-        "config": { "distDir": "dist" }
+        "config": {
+          "distDir": "dist"
         }
+      }
     ],
     "routes": [
-        { "handle": "filesystem" },
-        { "src": "/(.*)", "dest": "/index.html" }
+      { "handle": "filesystem" },
+      { "src": "/(.*)", "dest": "/index.html" }
     ]
-    
-}
+  }
