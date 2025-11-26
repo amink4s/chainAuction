@@ -1,4 +1,9 @@
 {
+  "accountAssociation": {
+    "header": "eyJmaWQiOjQ3NzEyNiwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweDIxOGE5YjU4QjkyOWRCRDBEOTEzMkFENEZlYzBkRkRCNzkyNDUyYkQifQ",
+    "payload": "eyJkb21haW4iOiJjaGFpbi1hdWN0aW9uLnZlcmNlbC5hcHAifQ",
+    "signature": "kcy39S2lvl9yt8nT8RtWa8tpXBoew+Vymfh6BiXHhDIURQww/hB5Nzf4Ot6LAAoLsWa6hetFmnj3SPvXub0fuBw="
+  },
     "frame": {
       "name": "Chain Auction",
       "version": "1",
