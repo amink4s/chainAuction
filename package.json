@@ -1,5 +1,5 @@
 {
-  "name": "chain-auction",
+  "name": "dailycast-auction",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -21,6 +21,6 @@
     "vite": "^6.2.0"
   },
   "engines": {
-    "node": "18.x"
+    "node": "24.x"
   }
 }
