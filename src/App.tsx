@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Header } from './components/Header';
-import { AuctionCard } from './components/AuctionCard';
-import { BidHistory } from './components/BidHistory';
-import { ContractViewer } from './components/ContractViewer';
-import { getDailyAuctionItem } from './services/auctionService';
-import { AuctionItem, Bid, AppView } from './types';
-import { MOCK_INITIAL_BIDS } from './constants';
+import { Header } from './components/Header.tsx';
+import { AuctionCard } from './components/AuctionCard.tsx';
+import { BidHistory } from './components/BidHistory.tsx';
+import { ContractViewer } from './components/ContractViewer.tsx';
+import { getDailyAuctionItem } from './services/auctionService.ts';
+import { AuctionItem, Bid, AppView } from './types.ts';
+import { MOCK_INITIAL_BIDS } from './constants.ts';
 import { Loader2, Gavel, History } from 'lucide-react';
 
 const App: React.FC = () => {
