@@ -1,0 +1,5 @@
+{
+  "name": "DailyCast Auction",
+  "description": "A Farcaster mini-app featuring a unique AI-generated daily auction, powered by Gemini 3.",
+  "requestFramePermissions": []
+}
