@@ -1,0 +1,28 @@
+{
+    "frame": {
+      "name": "Chain Auction",
+      "version": "1",
+      "iconUrl": "https://chain-auction.vercel.app/icon.png",
+      "homeUrl": "https://chain-auction.vercel.app/",
+      "subtitle": "Chain Reaction NFT auction",
+      "description": "Chain Reaction mini app images will be minted after 10 edits and auctioned in this mini app",
+      "primaryCategory": "art-creativity",
+      "screenshotUrls": [
+        "https://chain-auction.vercel.app/screenshot1.png"
+      ],
+      "imageUrl": "https://chain-auction.vercel.app/preview.png",
+      "heroImageUrl": "https://chain-auction.vercel.app/hero.png",
+      "splashImageUrl": "https://chain-auction.vercel.app/splash.png",
+      "splashBackgroundColor": "#000000",
+      "tags": [
+        "art",
+        "nft",
+        "chain",
+        "reaction"
+      ],
+      "buttonTitle": "View Auction",
+      "ogTitle": "ChainReaction NFTs",
+      "ogDescription": "Mint social edit images",
+      "ogImageUrl": "https://chain-auction.vercel.app/hero.png"
+    }
+  }
