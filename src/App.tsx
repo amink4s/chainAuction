@@ -7,6 +7,7 @@ import { getDailyAuctionItem } from '../services/auctionService.ts';
 import { AuctionItem, Bid, AppView } from '../types.ts';
 import { MOCK_INITIAL_BIDS } from '../constants.ts';
 import { Loader2, Gavel, History } from 'lucide-react';
+import { sdk } from '@farcaster/miniapp-sdk';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<AppView>('auction');
@@ -32,6 +33,43 @@ const App: React.FC = () => {
 
     loadDailyItem();
   }, []);
+
+  // Notify Farcaster that the miniapp is ready once the UI is stable.
+  // Waits for fonts / an initial paint to avoid visible jitter.
+  useEffect(() => {
+    let cancelled = false;
+
+    const callReady = async () => {
+      try {
+        // Only call ready after initial loading is finished
+        if (isLoading) return;
+
+        // Wait for fonts to load but fallback after 1s
+        if (document.fonts?.ready) {
+          await Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 1000))]);
+        } else {
+          // small delay so initial paint can occur
+          await new Promise((r) => setTimeout(r, 300));
+        }
+
+        // Allow two frames to ensure layout/paint is settled (helps avoid jitter)
+        await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+        if (!cancelled) {
+          await sdk.actions.ready();
+          console.debug('Farcaster miniapp: sdk.actions.ready() called');
+        }
+      } catch (err) {
+        console.warn('Farcaster ready failed:', err);
+      }
+    };
+
+    callReady();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isLoading]);
 
   const handlePlaceBid = (amount: number) => {
     const newBid: Bid = {
@@ -79,7 +117,7 @@ const App: React.FC = () => {
                       </div>
                       <button
                         onClick={() => handlePlaceBid((bids[0]?.amount || dailyItem.startingPrice) + 0.1)}
-                        className="w-full py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-purple-500/20 active:scale-95"
+                        className="w-full py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold rounded-xl transition-all shadow-lg hover:s[...]"
                       >
                         Bid {(bids[0]?.amount || dailyItem.startingPrice) + 0.1} ETH
                       </button>
