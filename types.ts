@@ -1,4 +1,4 @@
-export type AppView = 'auction' | 'contract' | 'history';
+export type AppView = 'auction' | 'history';
 
 export interface AuctionItem {
   id: string;
@@ -23,4 +23,10 @@ export interface ContractAnalysis {
   riskScore: number;
   summary: string;
   functions: string[];
+}
+
+export interface User {
+  username?: string;
+  pfpUrl?: string;
+  fid?: number;
 }

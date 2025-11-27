@@ -28,13 +28,13 @@ export const BidHistory: React.FC<BidHistoryProps> = ({ bids }) => {
                   <div>
                     <div className="font-medium text-slate-200 text-sm">{bid.bidder}</div>
                     <div className="text-xs text-slate-500 flex items-center gap-1">
-                       {bid.timestamp.toLocaleTimeString()}
-                       <ExternalLink className="w-2.5 h-2.5 hover:text-purple-400 cursor-pointer" />
+                      {bid.timestamp.toLocaleTimeString()}
+                      <ExternalLink className="w-2.5 h-2.5 hover:text-purple-400 cursor-pointer" />
                     </div>
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="font-bold text-white font-mono">{bid.amount} ETH</div>
+                  <div className="font-bold text-white font-mono">${bid.amount}</div>
                 </div>
               </div>
             ))}
