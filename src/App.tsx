@@ -4,11 +4,18 @@ import { AuctionCard } from '../components/AuctionCard.tsx';
 import { BidHistory } from '../components/BidHistory.tsx';
 import { ImageUploader } from '../components/ImageUploader.tsx';
 import { getDailyAuctionItem } from '../services/auctionService.ts';
+import { placeBid as apiPlaceBid, createAuction as apiCreateAuction } from '../services/apiService.ts';
 import { AuctionItem, Bid, AppView } from '../types.ts';
 import { MOCK_INITIAL_BIDS } from '../constants.ts';
 import { Loader2, Gavel, History } from 'lucide-react';
 import { sdk } from '@farcaster/miniapp-sdk';
 import { useQuickAuth } from './hooks/useQuickAuth.ts';
+import { createWalletClient, custom, parseEther } from 'viem';
+import { mainnet } from 'viem/chains';
+
+// Placeholder addresses - replace with real ones after deployment
+const USD_WRAPPER_ADDRESS = '0x0000000000000000000000000000000000000000';
+const CHAIN_ID = mainnet.id; // Or Optimism/Base
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<AppView>('auction');
@@ -18,6 +25,7 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const { user, isAuthenticated } = useQuickAuth();
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
+  const [isPlacingBid, setIsPlacingBid] = useState(false);
 
   // Load Daily Item
   useEffect(() => {
@@ -69,21 +77,64 @@ const App: React.FC = () => {
     };
   }, [isLoading]);
 
-  const handlePlaceBid = (amount: number) => {
-    const newBid: Bid = {
-      id: Date.now().toString(),
-      bidder: user?.username || 'You',
-      amount: amount,
-      timestamp: new Date(),
-      hash: '0x' + Math.random().toString(16).substr(2, 40)
-    };
-    setBids(prev => [newBid, ...prev]);
+  const handlePlaceBid = async (amountUsd: number) => {
+    if (!user) {
+      alert('Please sign in to bid');
+      return;
+    }
+
+    setIsPlacingBid(true);
+    try {
+      // 1. Connect to wallet
+      const walletClient = createWalletClient({
+        chain: mainnet,
+        transport: custom(window.ethereum!)
+      });
+
+      const [address] = await walletClient.requestAddresses();
+
+      // 2. Call Contract (Mocked logic for now as we don't have ABI imported yet)
+      // In real implementation:
+      // await walletClient.writeContract({
+      //   address: USD_WRAPPER_ADDRESS,
+      //   abi: USD_WRAPPER_ABI,
+      //   functionName: 'placeBid',
+      //   args: [dailyItem?.id, amountUsd],
+      //   value: parseEther('0.01'), // Calculated ETH amount
+      //   account: address
+      // });
+
+      console.log(`Placing bid of $${amountUsd} from ${address}`);
+
+      // 3. Index bid in backend
+      const newBid = await apiPlaceBid(dailyItem?.id || '1', user.username || 'Anonymous', amountUsd);
+
+      setBids(prev => [newBid, ...prev]);
+    } catch (err) {
+      console.error('Bid failed:', err);
+      alert('Failed to place bid');
+    } finally {
+      setIsPlacingBid(false);
+    }
   };
 
-  const handleCreateAuction = () => {
-    // Placeholder for creating auction
-    console.log('Creating auction with image:', uploadedImage);
-    // TODO: Implement API call to create auction
+  const handleCreateAuction = async () => {
+    if (!uploadedImage || !user) return;
+
+    try {
+      // Upload image logic here (e.g. to IPFS or S3)
+      // For now, we use a mock URL
+      const imageUrl = URL.createObjectURL(uploadedImage);
+
+      await apiCreateAuction(imageUrl, user.username || 'creator');
+
+      alert('Auction created!');
+      setUploadedImage(null);
+      // Refresh daily item or switch view
+    } catch (err) {
+      console.error('Create auction failed:', err);
+      alert('Failed to create auction');
+    }
   };
 
   return (
@@ -136,9 +187,10 @@ const App: React.FC = () => {
                       </div>
                       <button
                         onClick={() => handlePlaceBid((bids[0]?.amount || dailyItem?.startingPrice || 0) + 1)}
-                        className="w-full py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-purple-500/25 active:scale-[0.98]"
+                        disabled={isPlacingBid}
+                        className="w-full py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-purple-500/25 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        Bid ${(bids[0]?.amount || dailyItem?.startingPrice || 0) + 1}
+                        {isPlacingBid ? 'Placing Bid...' : `Bid $${(bids[0]?.amount || dailyItem?.startingPrice || 0) + 1}`}
                       </button>
                       <p className="text-xs text-center text-slate-500">
                         + Gas fees apply. Powered by Farcaster.

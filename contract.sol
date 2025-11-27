@@ -117,10 +117,23 @@ contract FarcasterNativeAuction is ReentrancyGuard, Ownable, Pausable {
      * @param _auctionId The ID of the auction
      */
     function placeBid(uint256 _auctionId) external payable nonReentrant auctionExists(_auctionId) whenNotPaused {
+        _placeBid(_auctionId, msg.sender);
+    }
+
+    /**
+     * @notice Place a bid on behalf of another address.
+     * @param _auctionId The ID of the auction
+     * @param _bidder The address of the bidder
+     */
+    function placeBidFor(uint256 _auctionId, address _bidder) external payable nonReentrant auctionExists(_auctionId) whenNotPaused {
+        _placeBid(_auctionId, _bidder);
+    }
+
+    function _placeBid(uint256 _auctionId, address _bidder) internal {
         Auction storage auction = auctions[_auctionId];
 
         require(!auction.ended, "Auction ended");
-        require(msg.sender != auction.seller, "Seller cannot bid");
+        require(_bidder != auction.seller, "Seller cannot bid");
 
         // Case 1: First Bid
         if (auction.highestBid == 0) {
@@ -130,11 +143,11 @@ contract FarcasterNativeAuction is ReentrancyGuard, Ownable, Pausable {
             auction.startTime = block.timestamp;
             auction.endTime = block.timestamp + auction.duration;
             
-            auction.highestBidder = payable(msg.sender);
+            auction.highestBidder = payable(_bidder);
             auction.highestBid = msg.value;
 
-            emit AuctionStarted(_auctionId, msg.sender, auction.endTime);
-            emit BidPlaced(_auctionId, msg.sender, msg.value, auction.endTime);
+            emit AuctionStarted(_auctionId, _bidder, auction.endTime);
+            emit BidPlaced(_auctionId, _bidder, msg.value, auction.endTime);
         } 
         // Case 2: Subsequent Bids
         else {
@@ -150,7 +163,7 @@ contract FarcasterNativeAuction is ReentrancyGuard, Ownable, Pausable {
             pendingReturns[auction.highestBidder] += auction.highestBid;
 
             // Update state
-            auction.highestBidder = payable(msg.sender);
+            auction.highestBidder = payable(_bidder);
             auction.highestBid = msg.value;
 
             // Anti-Sniping: Extend auction if bid placed in last X minutes
@@ -158,7 +171,7 @@ contract FarcasterNativeAuction is ReentrancyGuard, Ownable, Pausable {
                 auction.endTime = block.timestamp + timeBuffer;
             }
 
-            emit BidPlaced(_auctionId, msg.sender, msg.value, auction.endTime);
+            emit BidPlaced(_auctionId, _bidder, msg.value, auction.endTime);
         }
     }
 
