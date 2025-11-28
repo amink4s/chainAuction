@@ -13,9 +13,9 @@ import { useQuickAuth } from './hooks/useQuickAuth.ts';
 import { createWalletClient, custom, parseEther } from 'viem';
 import { mainnet } from 'viem/chains';
 
-// Placeholder addresses - replace with real ones after deployment
-const USD_WRAPPER_ADDRESS = '0x0000000000000000000000000000000000000000';
-const CHAIN_ID = mainnet.id; // Or Optimism/Base
+const SIMPLE_NFT_ADDRESS = '0x419f7B562C2be40d08507cF03c4724fa2356c0aC';
+const AUCTION_CONTRACT_ADDRESS = '0x5a37e28d9a7f82f30BF83930722a63c2c9c1BE01';
+const CHAIN_ID = 8453; 
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<AppView>('auction');

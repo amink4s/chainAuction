@@ -56,7 +56,7 @@ contract FarcasterNativeAuctionUSDC is ReentrancyGuard, Ownable, Pausable {
     uint256 public timeBuffer = 15 minutes;
 
     mapping(uint256 => Auction) public auctions;
-    mapping(address => uint26) public pendingReturns;
+    mapping(address => uint256) public pendingReturns;
 
     // --- Constructor ---
     constructor(address _usdcTokenAddress) Ownable(msg.sender) {
