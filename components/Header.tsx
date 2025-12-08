@@ -26,7 +26,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onViewChange, user 
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center">
                 <Radio className="w-5 h-5 text-white" />
               </div>
-              <span>Daily<span className="text-purple-400">Cast</span></span>
+              <span className="text-purple-400">Cast<span>Auction</span></span>
             </>
           )}
         </div>
